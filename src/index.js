@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(response => response.json())
     .then(beerData => {
         beerList.innerHTML = ''
+        customerReviews.innerHTML = ''
         beerData.forEach(item => {
             createDOM(item)
         })
@@ -31,9 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`http://localhost:3000/beers/${id}`)
         .then(response => response.json())
         .then(beer => {
-            beerName.innerText = beer.name
-            beerImage.setAttribute("src", beer.image_url)
-            beerDescription.innerText = beer.description
+            displayBeerInfo(beer)
         })
     }
 
@@ -43,5 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
         beerName.innerText = beer.name
         beerImage.setAttribute("src", beer.image_url)
         beerDescription.innerText = beer.description
+
+        console.log(beer.reviews)
+
+        beer.reviews.forEach(item => {
+            let review = document.createElement("li")
+            review.innerText = item
+            customerReviews.append(review)
+        })
     }
 })
