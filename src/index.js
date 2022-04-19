@@ -6,4 +6,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const editDescriptionForm = document.getElementById("description-form");
     const customerReviews = document.getElementById("review-list");
     const reviewForm = document.getElementById("review-form")
+
+    fetch("http://localhost:3000/beers")
+    .then(response => response.json())
+    .then(data => {
+        beerList.innerHTML = ''
+        data.forEach(item => {
+            createDOM(item)
+        })
+    })
+
+    function createDOM(data) {
+        let item = document.createElement("li")
+        item.innerText = data.name
+        beerList.appendChild(item)
+    }
 })
