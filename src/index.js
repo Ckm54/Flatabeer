@@ -42,13 +42,40 @@ document.addEventListener("DOMContentLoaded", () => {
         beerName.innerText = beer.name
         beerImage.setAttribute("src", beer.image_url)
         beerDescription.innerText = beer.description
+        const id = beer.id
 
         console.log(beer.reviews)
 
+        customerReviews.innerHTML = ''
         beer.reviews.forEach(item => {
             let review = document.createElement("li")
             review.innerText = item
             customerReviews.append(review)
         })
+
+        reviewForm.addEventListener("submit", function(e) {
+            e.preventDefault()
+            submitReview(beer, id)
+        })
     }
 })
+
+function submitReview(beer) {
+    const entry = document.getElementById("review").value
+    const id = beer.id
+    console.log(id)
+    let data = {
+        reviews: [...(beer.reviews), entry]
+    }
+    fetch(`http://localhost:3000/beers/${id}`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    
+}
