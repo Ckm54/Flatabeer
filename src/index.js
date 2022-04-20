@@ -36,6 +36,16 @@ document.addEventListener("DOMContentLoaded", () => {
     //     })
     // }
 
+    function displayReviews(beer, reviewContainer) {
+        beer.reviews.forEach(item => {
+            let review = document.createElement("li")
+            review.innerText = item
+            reviewContainer.append(review)
+            review.addEventListener("click", function(){
+                review.remove()
+            })
+        })
+    }
 
 
     function displayBeerInfo(beer) {
@@ -77,14 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         beerContainer.querySelector("#description").value = beer.description
 
         let reviewsContainer = beerContainer.querySelector("#review-list")
-        beer.reviews.forEach(item => {
-            let review = document.createElement("li")
-            review.innerText = item
-            reviewsContainer.append(review)
-            review.addEventListener("click", function(){
-                review.remove()
-            })
-        })
+        displayReviews(beer, reviewsContainer)
 
         mainBeerContainer.appendChild(beerContainer)
         const id = beer.id
@@ -95,6 +98,9 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault()
             const entry = reviewForm["review"].value
             submitReview(beer, id, entry)
+            reviewsContainer.innerHTML = ''
+            displayReviews(beer, reviewsContainer)
+            reviewForm.reset()
         })
 
         // editDescriptionForm.addEventListener("submit", function(e) {
@@ -123,9 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify(data)
         })
         .then(response => response.json())
-        .then(result => {
-            displayReviews(result)
-        })
+        .then(result => result)
         
     }
 
