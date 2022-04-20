@@ -74,6 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         beerContainer.innerHTML = detailHtml
 
+        beerContainer.querySelector("#description").value = beer.description
+
         let reviewsContainer = beerContainer.querySelector("#review-list")
         beer.reviews.forEach(item => {
             let review = document.createElement("li")
