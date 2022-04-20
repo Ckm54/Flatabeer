@@ -85,23 +85,15 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         mainBeerContainer.appendChild(beerContainer)
-        
-        // const descriptionTextArea = editDescriptionForm.querySelector("#description")
-        // beerName.innerText = beer.name
-        // beerImage.setAttribute("src", beer.image_url)
-        // beerDescription.innerText = beer.description
-        // descriptionTextArea.value = beer.description
         const id = beer.id
+        console.log(id)
 
-        // customerReviews.innerHTML = ''
-        // displayReviews(beer)
-        
-        // const reviewForm = document.getElementById("review-form")
-        // reviewForm.addEventListener("submit", function(e){
-        //     e.preventDefault()
-        //     const entry = reviewForm["review"].value
-        //     submitReview(beer, id, entry)
-        // })
+        const reviewForm = beerContainer.querySelector("#review-form")
+        reviewForm.addEventListener("submit", function(e){
+            e.preventDefault()
+            const entry = reviewForm["review"].value
+            submitReview(beer, id, entry)
+        })
 
         // editDescriptionForm.addEventListener("submit", function(e) {
         //     e.preventDefault()
@@ -130,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(response => response.json())
         .then(result => {
-            customerReviews.innerHTML = ''
             displayReviews(result)
         })
         
