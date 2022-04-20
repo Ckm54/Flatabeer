@@ -40,8 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
             let review = document.createElement("li")
             review.innerText = item
             customerReviews.append(review)
+            review.addEventListener("click", function(){
+                review.remove()
+            })
         })
     }
+
+    
 
     function displayBeerInfo(beer) {
         beerName.innerText = beer.name
@@ -61,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function submitReview(beer, id, entry) {
-        console.log("In submit review", id)
+        // console.log("In submit review", id)
         beer.reviews.push(entry)
         const reviews = beer.reviews
         const data = {
