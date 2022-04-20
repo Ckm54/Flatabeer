@@ -84,7 +84,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         beerContainer.innerHTML = detailHtml
 
-        beerContainer.querySelector("#description").value = beer.description
+        const decriptionContainer = beerContainer.querySelector("#beer-description")
+
+        let descriptionTextArea = beerContainer.querySelector("#description")
+        descriptionTextArea.value = beer.description
 
         let reviewsContainer = beerContainer.querySelector("#review-list")
         displayReviews(beer, reviewsContainer)
@@ -103,11 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
             reviewForm.reset()
         })
 
-        // editDescriptionForm.addEventListener("submit", function(e) {
-        //     e.preventDefault()
-        //     const editedDesc = descriptionTextArea.value
-        //     submitEditedBeerDescription(beer, editedDesc)
-        // })
+        const editDescriptionForm = beerContainer.querySelector("#description-form")
+        editDescriptionForm.addEventListener("submit", function(e) {
+            e.preventDefault()
+            const editedDesc = descriptionTextArea.value
+            submitEditedBeerDescription(beer, id, editedDesc, decriptionContainer)
+        })
     }
 
     function submitReview(beer, id, entry) {
@@ -133,8 +137,25 @@ document.addEventListener("DOMContentLoaded", () => {
         
     }
 
-    function submitEditedBeerDescription(beer, editedDescription) {
-        console.log(beer.name)
-        console.log(editedDescription)
+    function submitEditedBeerDescription(beer, id, editedDescription, descContainer) {
+        const data = {
+            id: id,
+            name: beer.name,
+            description: editedDescription,
+            "image_url": beer.image_url,
+            reviews: beer.reviews
+        }
+        fetch(`http://localhost:3000/beers/${id}`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            descContainer.innerText = ''
+            descContainer.innerText = result.description
+        })
     }
 })
