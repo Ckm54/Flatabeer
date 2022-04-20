@@ -27,14 +27,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    // function fetchBeer(id) {
-    //     if(typeof(id) !== 'number') id = parseInt(id)
-    //     fetch(`http://localhost:3000/beers/${id}`)
-    //     .then(response => response.json())
-    //     .then(beer => {
-    //         displayBeerInfo(beer)
-    //     })
-    // }
+    function fetchBeer(id) {
+        if(typeof(id) !== 'number') id = parseInt(id)
+        fetch(`http://localhost:3000/beers/${id}`)
+        .then(response => response.json())
+        .then(beer => {
+            displayBeerInfo(beer)
+        })
+    }
+    
+    fetchBeer(1)
 
     function displayReviews(beer, reviewContainer) {
         beer.reviews.forEach(item => {
