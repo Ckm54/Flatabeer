@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const mainBeerContainer = document.querySelector("main")
     const beerList = document.getElementById("beer-list");
     const beerName = document.getElementById("beer-name");
     const beerImage = document.querySelector("img");
@@ -10,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(response => response.json())
     .then(beerData => {
         beerList.innerHTML = ''
-        customerReviews.innerHTML = ''
+        // customerReviews.innerHTML = ''
         beerData.forEach(item => {
             createDOM(item)
         })
@@ -35,34 +36,78 @@ document.addEventListener("DOMContentLoaded", () => {
     //     })
     // }
 
-    function displayReviews(beer) {
+
+
+    function displayBeerInfo(beer) {
+        mainBeerContainer.innerHTML = '';
+
+        const beerContainer = document.createElement("div")
+        beerContainer.setAttribute("class", "beer-details")
+
+        const detailHtml = `
+            <h2 id="beer-name">${beer.name}</h2>
+            <img
+            id="beer-image"
+            alt="Beer Name Goes Here"
+            src="${beer.image_url}"
+            />
+            <p>
+            <em id="beer-description">${beer.description}</em>
+            </p>
+
+            <form id="description-form">
+            <label for="description">Edited Description:</label>
+            <textarea id="description"></textarea>
+            <button type="submit">Update Beer</button>
+            </form>
+
+            <h3>Customer Reviews</h3>
+            <ul id="review-list">
+            
+            </ul>
+            <form id="review-form">
+            <label for="review">Your Review:</label>
+            <textarea id="review"></textarea>
+            <button type="submit">Add review</button>
+            </form>
+        `
+
+        beerContainer.innerHTML = detailHtml
+
+        let reviewsContainer = beerContainer.querySelector("#review-list")
         beer.reviews.forEach(item => {
             let review = document.createElement("li")
             review.innerText = item
-            customerReviews.append(review)
+            reviewsContainer.append(review)
             review.addEventListener("click", function(){
                 review.remove()
             })
         })
-    }
 
-    
-
-    function displayBeerInfo(beer) {
-        beerName.innerText = beer.name
-        beerImage.setAttribute("src", beer.image_url)
-        beerDescription.innerText = beer.description
+        mainBeerContainer.appendChild(beerContainer)
+        
+        // const descriptionTextArea = editDescriptionForm.querySelector("#description")
+        // beerName.innerText = beer.name
+        // beerImage.setAttribute("src", beer.image_url)
+        // beerDescription.innerText = beer.description
+        // descriptionTextArea.value = beer.description
         const id = beer.id
 
-        customerReviews.innerHTML = ''
-        displayReviews(beer)
+        // customerReviews.innerHTML = ''
+        // displayReviews(beer)
         
-        const reviewForm = document.getElementById("review-form")
-        reviewForm.addEventListener("submit", function(e){
-            e.preventDefault()
-            const entry = reviewForm["review"].value
-            submitReview(beer, id, entry)
-        })
+        // const reviewForm = document.getElementById("review-form")
+        // reviewForm.addEventListener("submit", function(e){
+        //     e.preventDefault()
+        //     const entry = reviewForm["review"].value
+        //     submitReview(beer, id, entry)
+        // })
+
+        // editDescriptionForm.addEventListener("submit", function(e) {
+        //     e.preventDefault()
+        //     const editedDesc = descriptionTextArea.value
+        //     submitEditedBeerDescription(beer, editedDesc)
+        // })
     }
 
     function submitReview(beer, id, entry) {
@@ -89,5 +134,10 @@ document.addEventListener("DOMContentLoaded", () => {
             displayReviews(result)
         })
         
+    }
+
+    function submitEditedBeerDescription(beer, editedDescription) {
+        console.log(beer.name)
+        console.log(editedDescription)
     }
 })
