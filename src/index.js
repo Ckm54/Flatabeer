@@ -1,17 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     const mainBeerContainer = document.querySelector("main")
     const beerList = document.getElementById("beer-list");
-    const beerName = document.getElementById("beer-name");
-    const beerImage = document.querySelector("img");
-    const beerDescription = document.getElementById("beer-description");
-    const editDescriptionForm = document.getElementById("description-form");
-    const customerReviews = document.getElementById("review-list");
 
     fetch("http://localhost:3000/beers")
     .then(response => response.json())
     .then(beerData => {
         beerList.innerHTML = ''
-        // customerReviews.innerHTML = ''
         beerData.forEach(item => {
             createDOM(item)
         })
@@ -35,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             displayBeerInfo(beer)
         })
     }
-    
+
     fetchBeer(1)
 
     function displayReviews(beer, reviewContainer) {
@@ -117,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function submitReview(beer, id, entry) {
-        // console.log("In submit review", id)
         beer.reviews.push(entry)
         const reviews = beer.reviews
         const data = {
