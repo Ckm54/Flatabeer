@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const beerDescription = document.getElementById("beer-description");
     const editDescriptionForm = document.getElementById("description-form");
     const customerReviews = document.getElementById("review-list");
-    const reviewForm = document.getElementById("review-form")
 
     fetch("http://localhost:3000/beers")
     .then(response => response.json())
@@ -27,62 +26,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    function fetchBeer(id) {
-        if(typeof(id) !== 'number') id = parseInt(id)
-        fetch(`http://localhost:3000/beers/${id}`)
-        .then(response => response.json())
-        .then(beer => {
-            displayBeerInfo(beer)
-        })
-    }
+    // function fetchBeer(id) {
+    //     if(typeof(id) !== 'number') id = parseInt(id)
+    //     fetch(`http://localhost:3000/beers/${id}`)
+    //     .then(response => response.json())
+    //     .then(beer => {
+    //         displayBeerInfo(beer)
+    //     })
+    // }
 
-    fetchBeer(1)
-
-    function displayBeerInfo(beer) {
-        beerName.innerText = beer.name
-        beerImage.setAttribute("src", beer.image_url)
-        beerDescription.innerText = beer.description
-
-        console.log(beer.reviews)
-
-        customerReviews.innerHTML = ''
+    function displayReviews(beer) {
         beer.reviews.forEach(item => {
             let review = document.createElement("li")
             review.innerText = item
             customerReviews.append(review)
         })
+    }
 
-        reviewForm.addEventListener("submit", function(e) {
+    function displayBeerInfo(beer) {
+        beerName.innerText = beer.name
+        beerImage.setAttribute("src", beer.image_url)
+        beerDescription.innerText = beer.description
+        const id = beer.id
+
+        customerReviews.innerHTML = ''
+        displayReviews(beer)
+        
+        const reviewForm = document.getElementById("review-form")
+        reviewForm.addEventListener("submit", function(e){
             e.preventDefault()
-            submitReview(beer)
+            const entry = reviewForm["review"].value
+            submitReview(beer, id, entry)
         })
     }
-})
 
-function submitReview(beer) {
-    const entry = document.getElementById("review").value
-    console.log(beer.id)
-    beer.reviews.push(entry)
-    const reviews = beer.reviews
-    const data = {
-        id: beer.id,
-        name: beer.name,
-        description: beer.description,
-        "image_url": beer.image_url,
-        reviews: reviews
-    }
-    fetch(`http://localhost:3000/beers/${data.id}`, {
-        method: 'PATCH',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log(result)
-        debugger
+    function submitReview(beer, id, entry) {
+        console.log("In submit review", id)
+        beer.reviews.push(entry)
+        const reviews = beer.reviews
+        const data = {
+            id: id,
+            name: beer.name,
+            description: beer.description,
+            "image_url": beer.image_url,
+            reviews: reviews
+        }
+        fetch(`http://localhost:3000/beers/${id}`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            customerReviews.innerHTML = ''
+            displayReviews(result)
+        })
         
-    })
-    
-}
+    }
+})
