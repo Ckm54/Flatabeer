@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
         beerName.innerText = beer.name
         beerImage.setAttribute("src", beer.image_url)
         beerDescription.innerText = beer.description
-        const id = beer.id
 
         console.log(beer.reviews)
 
@@ -55,27 +54,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
         reviewForm.addEventListener("submit", function(e) {
             e.preventDefault()
-            submitReview(beer, id)
+            submitReview(beer)
         })
     }
 })
 
 function submitReview(beer) {
     const entry = document.getElementById("review").value
-    const id = beer.id
-    console.log(id)
-    let data = {
-        reviews: [...(beer.reviews), entry]
+    console.log(beer.id)
+    beer.reviews.push(entry)
+    const reviews = beer.reviews
+    const data = {
+        id: beer.id,
+        name: beer.name,
+        description: beer.description,
+        "image_url": beer.image_url,
+        reviews: reviews
     }
-    fetch(`http://localhost:3000/beers/${id}`, {
-        method: 'POST',
+    fetch(`http://localhost:3000/beers/${data.id}`, {
+        method: 'PATCH',
         headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(result => {
+        console.log(result)
+        debugger
+        
+    })
     
 }
