@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         mainBeerContainer.appendChild(beerContainer)
         const id = beer.id
-        console.log(id)
+        // console.log(id)
 
         const reviewForm = beerContainer.querySelector("#review-form")
         reviewForm.addEventListener("submit", function(e){
